@@ -48,7 +48,7 @@ def generate_static_pages():
         for t in Topic.by_forum(f.pk):
             latin_title = t.latin_title()
             request.path = '/f/%d/t/%d/%s/' % (f.pk, t.pk, latin_title)
-            response = views.topic(request, t.pk, latin_title)
+            response = views.topic(request, f.pk, t.pk, latin_title)
             _create_file('%s/index.html' % request.path, response.content)
             print "TOPIC DONE", request.path
 
