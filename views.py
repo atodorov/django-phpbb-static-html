@@ -25,7 +25,11 @@ def topic(request, topic_id, subject):
     topic = Topic.objects.get(pk=topic_id)
 
     for p in Post.objects.filter(topic_id=topic_id).order_by('post_time'):
-        user = User.objects.get(pk=p.poster_id)
+        try:
+            user = User.objects.get(pk=p.poster_id)
+        except:
+            user = User(username=p.post_username)
+
         context.append((p, user))
 
     return render(request, 'topic.html', {'posts' : context, 'topic' : topic })

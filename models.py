@@ -56,6 +56,7 @@ class Post(models.Model):
     poster_id = models.BigIntegerField()
     post_time = models.BigIntegerField() # another stupid Unix timestamp
 
+    post_username  = models.CharField(max_length=255)
     post_subject   =  models.CharField(max_length=255)
     post_text      =  models.TextField()
 
