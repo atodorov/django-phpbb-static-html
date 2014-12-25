@@ -93,7 +93,7 @@ class Topic(models.Model):
                 new_title += translate_map[c]
             else:
                 new_title += c
-
+        new_title = new_title.replace(' ', '-')
         return new_title
 
     class Meta:

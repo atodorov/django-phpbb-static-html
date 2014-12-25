@@ -2,17 +2,25 @@
 {% block title %}phpBB index{% endblock %}
 {% block content %}
     <ul>
+    <table border="0">
     {% for id,obj in forums.items %}
-        <li>
-            {{ obj.f.forum_name }}
-            <ul>
-            {% for sf in obj.children %}
-                <li>
-                    <a href="{% url 'forum' sf.forum_id %}">{{ sf.forum_name|safe }}</a> - topics: {{ sf.forum_topics }}, posts {{ sf.forum_posts }}
-                </li>
-            {% endfor %}
-            </ul>
-        </li>
+        <tr>
+            <th align="left" width="700">{{ obj.f.forum_name }}</th>
+            <th align="right">Topics</th>
+            <th align="right">Posts</th>
+        </tr>
+        {% for sf in obj.children %}
+        <tr>
+            <td>
+                <a href="{% url 'forum' sf.forum_id %}">{{ sf.forum_name|safe }}</a>
+            </td>
+            <td align="right">{{ sf.forum_topics }}</td>
+            <td align="right">{{ sf.forum_posts }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">&nbsp;</td>
+        </tr>
     {% endfor %}
-    </ul>
+    </table>
 {% endblock %}
