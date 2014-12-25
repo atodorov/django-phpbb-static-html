@@ -31,7 +31,7 @@ DATABASES = {
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-# in case you're dumping to Amazon S3
+# in case you're archiving to Amazon S3
 AWS_S3_ACCESS_KEY_ID='XXXXXXX'
 AWS_S3_SECRET_ACCESS_KEY='YYY'
 AWS_STORAGE_BUCKET_NAME='s3-bucket'
@@ -47,3 +47,8 @@ How to use
 
 This will generate static HTML for your index, forum and topic pages.
 Avatars are linked to Gravatar.
+
+Demo
+----
+
+An example archive is available at http://ouim.atodorov.org
