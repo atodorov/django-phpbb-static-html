@@ -29,6 +29,7 @@ class Topic(models.Model):
     forum_id = models.BigIntegerField()
     topic_title = models.CharField(max_length=255)
     topic_time = models.BigIntegerField() # this is a Unix timestamp, how stupid
+    topic_approved = models.BooleanField()
     topic_views   = models.BigIntegerField()
     topic_replies = models.BigIntegerField()
 

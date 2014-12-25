@@ -15,7 +15,7 @@ def forum(request, forum_id):
     context = []
     forum = Forum.objects.get(pk=forum_id)
 
-    for t in Topic.objects.filter(forum_id=forum_id).order_by('-topic_time'):
+    for t in Topic.objects.filter(forum_id=forum_id, topic_approved=True).order_by('-topic_time'):
         context.append(t)
 
     return render(request, 'forum.html', {'topics' : context, 'forum' : forum })

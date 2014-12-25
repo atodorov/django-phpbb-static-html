@@ -45,7 +45,7 @@ def generate_static_pages():
         print "DONE", request.path
 
     # topics views
-    for t in Topic.objects.all():
+    for t in Topic.objects.filter(topic_approved=True):
         latin_title = t.latin_title()
         request.path = '/t/%d/%s/' % (t.pk, latin_title)
         response = views.topic(request, t.pk, latin_title)
