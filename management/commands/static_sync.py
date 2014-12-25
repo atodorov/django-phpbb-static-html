@@ -1,3 +1,4 @@
+import os
 from phpbb_to_static import views
 from phpbb_to_static.models import *
 from django.core.files.base import ContentFile
@@ -12,16 +13,14 @@ class Command(BaseCommand):
     can_import_settings = True
 
     def handle(self, *args, **options):
-        try:
-            generate_static_pages()
-        except Exception as e:
-#            print e.code, e
-            raise
+        generate_static_pages()
 
 
 def _create_file(filename, contents):
+    filename = filename.replace('//', '/')
     if not filename.startswith(default_storage.location):
         filename = os.path.join(default_storage.location, filename.lstrip("/"))
+
     default_storage.save(filename, ContentFile(contents))
 
 def generate_static_pages():
@@ -34,13 +33,13 @@ def generate_static_pages():
     request.user = AnonymousUser()
 
     # index view
-    request.path = '/'
+    request.path = ''
     response = views.index(request)
-    _create_file('/index.html', response.content)
+    _create_file('index.html', response.content)
 
     # forums views
     for f in Forum.objects.filter(parent_id__gt=0):
-        request.path = '/%d/' % f.pk
+        request.path = '%d/' % f.pk
         response = views.forum(request, f.pk)
         _create_file('%s/index.html' % request.path, response.content)
         print "DONE", request.path
@@ -48,7 +47,7 @@ def generate_static_pages():
     # topics views
     for t in Topics.objects.all():
         latin_title = t.latin_title()
-        request.path = '/%d/%s/' % (t.pk, latin_title)
+        request.path = '%d/%s/' % (t.pk, latin_title)
         response = views.topic(request, t.pk, latin_title)
         _create_file('%s/index.html' % request.path, response.content)
         print "DONE", request.path
