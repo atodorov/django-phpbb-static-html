@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -55,7 +56,6 @@ class Post(models.Model):
     poster_id = models.BigIntegerField()
     post_time = models.BigIntegerField() # another stupid Unix timestamp
 
-    post_username  = models.CharField(max_length=255)
     post_subject   =  models.CharField(max_length=255)
     post_text      =  models.TextField()
 
@@ -68,3 +68,21 @@ class Post(models.Model):
     class Meta:
         managed = False
         db_table = "%s_posts" % settings.PHPBB_TABLE_PREFIX
+
+class User(models.Model):
+    user_id   = models.BigIntegerField(primary_key=True)
+    username  =  models.CharField(max_length=255)
+    user_email=  models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return "(%d) %s" % (self.pk, self.username)
+
+    def gravatar_hash(self):
+        return hashlib.md5(self.user_email.lower().strip()).hexdigest()
+
+    def gravatar_url(self):
+        return "//gravatar.com/avatar/%s" % self.gravatar_hash()
+
+    class Meta:
+        managed = False
+        db_table = "%s_users" % settings.PHPBB_TABLE_PREFIX

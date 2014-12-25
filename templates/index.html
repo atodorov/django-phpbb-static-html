@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}phpBB index{% endblock %}
+{% block content %}
+    <ul>
+    {% for id,obj in forums.items %}
+        <li>
+            {{ obj.f.forum_name }}
+            <ul>
+            {% for sf in obj.children %}
+                <li>
+                    <a href="{% url 'forum' sf.forum_id %}">{{ sf.forum_name|safe }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ forum.forum_name }}{% endblock %}
+{% block content %}
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Views</th>
+            <th>Replies</th>
+        </tr>
+    {% for obj in topics %}
+        <tr>
+            <td>{{ obj.datetime }}</td>
+            <td>
+                <a href="{% url 'topic' obj.topic_id obj.topic_title %}">{{ obj.topic_title|safe }}</a>
+                <sub>by {{ obj.topic_first_poster_name }}</sub>
+            </td>
+            <td>{{ obj.topic_views }}</td>
+            <td>{{ obj.topic_replies }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
