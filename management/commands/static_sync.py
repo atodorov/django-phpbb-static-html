@@ -39,15 +39,15 @@ def generate_static_pages():
 
     # forums views
     for f in Forum.objects.filter(parent_id__gt=0):
-        request.path = '%d/' % f.pk
+        request.path = 'f/%d/' % f.pk
         response = views.forum(request, f.pk)
         _create_file('%s/index.html' % request.path, response.content)
         print "DONE", request.path
 
     # topics views
-    for t in Topics.objects.all():
+    for t in Topic.objects.all():
         latin_title = t.latin_title()
-        request.path = '%d/%s/' % (t.pk, latin_title)
+        request.path = 't/%d/%s/' % (t.pk, latin_title)
         response = views.topic(request, t.pk, latin_title)
         _create_file('%s/index.html' % request.path, response.content)
         print "DONE", request.path
