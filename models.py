@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import hashlib
+import html
 import string
+import hashlib
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -50,6 +51,7 @@ class Topic(models.Model):
 
     def latin_title(self):
         title = self.topic_title.lower().strip().replace("\n", "").replace("\r", "")
+        title = html.unescape(title)
         translate_map = {
             u"а" : "a",
             u"б" : "b",
@@ -140,3 +142,5 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = "%s_users" % settings.PHPBB_TABLE_PREFIX
+
+
