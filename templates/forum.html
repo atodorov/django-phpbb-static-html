@@ -12,7 +12,7 @@
         <tr>
             <td>{{ obj.datetime|date:"Y-m-d_H:i" }}</td>
             <td>
-                <a href="{% url 'topic' obj.topic_id obj.latin_title %}">{{ obj.topic_title|safe }}</a>
+                <a href="{% url 'topic' forum.pk obj.topic_id obj.latin_title %}">{{ obj.topic_title|safe }}</a>
                 <sub>by {{ obj.topic_first_poster_name }}</sub>
             </td>
             <td>{{ obj.topic_views }}</td>

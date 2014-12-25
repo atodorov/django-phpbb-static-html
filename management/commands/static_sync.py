@@ -1,5 +1,4 @@
 import os
-from django.conf import settings
 from phpbb_to_static import views
 from phpbb_to_static.models import *
 from django.core.files.base import ContentFile
@@ -33,25 +32,25 @@ def generate_static_pages():
     request = WSGIRequest(env)
     request.user = AnonymousUser()
 
-    # index view
+    # index view - shows all forums
     request.path = '/'
     response = views.index(request)
     _create_file('index.html', response.content)
 
-    # forums views
-    for f in Forum.objects.filter(parent_id__gt=0).exclude(pk__in=settings.PHPBB_SKIP_FORUMS):
+    # forum view - shows all topics inside a forum
+    for f in Forum.objects.filter(parent_id__gt=0):
         request.path = '/f/%d/' % f.pk
         response = views.forum(request, f.pk)
         _create_file('%s/index.html' % request.path, response.content)
-        print "DONE", request.path
+        print "FORUM DONE", request.path
 
-    # topics views
-    for t in Topic.objects.filter(topic_approved=True):
-        latin_title = t.latin_title()
-        request.path = '/t/%d/%s/' % (t.pk, latin_title)
-        response = views.topic(request, t.pk, latin_title)
-        _create_file('%s/index.html' % request.path, response.content)
-        print "DONE", request.path
+        # topics view (for the current forum) - shows all posts inside a topic
+        for t in Topic.by_forum(f.pk):
+            latin_title = t.latin_title()
+            request.path = '/f/%d/t/%d/%s/' % (f.pk, t.pk, latin_title)
+            response = views.topic(request, t.pk, latin_title)
+            _create_file('%s/index.html' % request.path, response.content)
+            print "TOPIC DONE", request.path
 
 
 

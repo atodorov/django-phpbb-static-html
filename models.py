@@ -7,7 +7,14 @@ from datetime import datetime
 from django.db import models
 from django.conf import settings
 
+class PublicForumsManager(models.Manager):
+    def get_queryset(self):
+        return super(self.__class__, self).get_queryset().exclude(pk__in=settings.PHPBB_SKIP_FORUMS)
+
 class Forum(models.Model):
+    # override default object manager
+    objects = PublicForumsManager()
+
     forum_id     = models.BigIntegerField(primary_key=True)
     parent_id    = models.BigIntegerField()
     left_id      = models.BigIntegerField()
@@ -19,6 +26,8 @@ class Forum(models.Model):
 
     def __unicode__(self):
         return "(%d) %s" % (self.pk, self.forum_name)
+
+
 
     class Meta:
         managed = False
@@ -99,6 +108,10 @@ class Topic(models.Model):
         new_title = new_title.replace(' ', '-')
         return new_title
 
+    @classmethod
+    def by_forum(cls, forum_id):
+        return cls.objects.filter(forum_id=forum_id,topic_approved=True).order_by('-topic_time')
+
     class Meta:
         managed = False
         db_table = "%s_topics" % settings.PHPBB_TABLE_PREFIX
@@ -121,7 +134,9 @@ class Post(models.Model):
     def datetime(self):
         return datetime.fromtimestamp(self.post_time)
 
-
+    @classmethod
+    def by_forum_and_topic(cls, forum_id, topic_id):
+        return cls.objects.filter(forum_id=forum_id,topic_id=topic_id, post_approved=True).order_by('post_time')
 
     class Meta:
         managed = False
