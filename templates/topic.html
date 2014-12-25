@@ -10,7 +10,7 @@
                 {{ obj.datetime|date:"Y-m-d_H:i" }}
             </td>
             <td valign="top">
-                <strong>{{ obj.post_subject }}</strong>
+                <strong>{{ obj.post_subject|safe }}</strong>
                 <br/><br/>
                 {{ obj.post_text|safe }}
             </td>

@@ -33,13 +33,13 @@ def generate_static_pages():
     request.user = AnonymousUser()
 
     # index view
-    request.path = ''
+    request.path = '/'
     response = views.index(request)
     _create_file('index.html', response.content)
 
     # forums views
     for f in Forum.objects.filter(parent_id__gt=0):
-        request.path = 'f/%d/' % f.pk
+        request.path = '/f/%d/' % f.pk
         response = views.forum(request, f.pk)
         _create_file('%s/index.html' % request.path, response.content)
         print "DONE", request.path
@@ -47,7 +47,7 @@ def generate_static_pages():
     # topics views
     for t in Topic.objects.all():
         latin_title = t.latin_title()
-        request.path = 't/%d/%s/' % (t.pk, latin_title)
+        request.path = '/t/%d/%s/' % (t.pk, latin_title)
         response = views.topic(request, t.pk, latin_title)
         _create_file('%s/index.html' % request.path, response.content)
         print "DONE", request.path
