@@ -1,12 +1,13 @@
 from models import *
+from django.conf import settings
 from django.shortcuts import render
 
 def index(request):
     context = {}
 
-    for f in Forum.objects.filter(parent_id=0):
+    for f in Forum.objects.filter(parent_id=0).exclude(pk__in=settings.PHPBB_SKIP_FORUMS):
         context[f.forum_id] = { 'f' : f, 'children' : []}
-        for sf in Forum.objects.filter(parent_id=f.forum_id):
+        for sf in Forum.objects.filter(parent_id=f.forum_id).exclude(pk__in=settings.PHPBB_SKIP_FORUMS):
             context[f.forum_id]['children'].append(sf)
 
     return render(request, 'index.html', {'forums' : context })

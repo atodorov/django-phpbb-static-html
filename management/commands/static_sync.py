@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 from phpbb_to_static import views
 from phpbb_to_static.models import *
 from django.core.files.base import ContentFile
@@ -38,7 +39,7 @@ def generate_static_pages():
     _create_file('index.html', response.content)
 
     # forums views
-    for f in Forum.objects.filter(parent_id__gt=0):
+    for f in Forum.objects.filter(parent_id__gt=0).exclude(pk__in=settings.PHPBB_SKIP_FORUMS):
         request.path = '/f/%d/' % f.pk
         response = views.forum(request, f.pk)
         _create_file('%s/index.html' % request.path, response.content)
