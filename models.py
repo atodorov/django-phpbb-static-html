@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import hashlib
+import string
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -45,6 +48,54 @@ class Topic(models.Model):
     def datetime(self):
         return datetime.fromtimestamp(self.topic_time)
 
+    def latin_title(self):
+        title = self.topic_title.lower().strip().replace("\n", "").replace("\r", "")
+        translate_map = {
+            u"а" : "a",
+            u"б" : "b",
+            u"в" : "v",
+            u"г" : "g",
+            u"д" : "d",
+            u"е" : "e",
+            u"ж" : "zh",
+            u"з" : "z",
+            u"и" : "i",
+            u"й" : "i",
+            u"к" : "k",
+            u"л" : "l",
+            u"м" : "m",
+            u"н" : "n",
+            u"о" : "o",
+            u"п" : "p",
+            u"р" : "r",
+            u"с" : "s",
+            u"т" : "t",
+            u"у" : "u",
+            u"ф" : "f",
+            u"х" : "h",
+            u"ц" : "c",
+            u"ч" : "ch",
+            u"ш" : "sh",
+            u"щ" : "sht",
+            u"ъ" : "y",
+            u"ь" : "y",
+            u"ю" : "yu",
+            u"я" : "ya",
+        }
+
+        for c in title:
+            if c in string.punctuation:
+                title = title.replace(c, "")
+
+        new_title = ""
+        for index, c in enumerate(title):
+            if c in translate_map.keys():
+                new_title += translate_map[c]
+            else:
+                new_title += c
+
+        return new_title
+
     class Meta:
         managed = False
         db_table = "%s_topics" % settings.PHPBB_TABLE_PREFIX
@@ -65,6 +116,8 @@ class Post(models.Model):
 
     def datetime(self):
         return datetime.fromtimestamp(self.post_time)
+
+
 
     class Meta:
         managed = False
