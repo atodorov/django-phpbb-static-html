@@ -24,7 +24,7 @@ def topic(request, topic_id, subject):
     context = []
     topic = Topic.objects.get(pk=topic_id)
 
-    for p in Post.objects.filter(topic_id=topic_id).order_by('post_time'):
+    for p in Post.objects.filter(topic_id=topic_id, post_approved=True).order_by('post_time'):
         try:
             user = User.objects.get(pk=p.poster_id)
         except:

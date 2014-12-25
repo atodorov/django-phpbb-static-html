@@ -108,6 +108,7 @@ class Post(models.Model):
     forum_id  = models.BigIntegerField()
     poster_id = models.BigIntegerField()
     post_time = models.BigIntegerField() # another stupid Unix timestamp
+    post_approved = models.BooleanField()
 
     post_username  = models.CharField(max_length=255)
     post_subject   =  models.CharField(max_length=255)
