@@ -146,6 +146,7 @@ class User(models.Model):
     user_id   = models.BigIntegerField(primary_key=True)
     username  =  models.CharField(max_length=255)
     user_email=  models.CharField(max_length=100)
+    user_password = models.CharField(max_length=40)
 
     def __unicode__(self):
         return "(%d) %s" % (self.pk, self.username)
